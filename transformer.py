@@ -163,3 +163,15 @@ torch.Size([2, 4, 512])
 '''
 
 
+# 先设置画布
+plt.figure(figsize = (15, 5))
+
+# 实例化PositionalEncoding类对象，词嵌入维度为20，置零比率设置为0
+pe = PositionalEncoding(20, 0)
+
+# 往pe中传入一个全零初始化的变量x，相当于展示pe
+y = pe(Variable(torch.zeros(1, 100, 20)))
+
+plt.plot(np.arange(100), y[0, :, 4:8].data.numpy())
+
+plt.legend(["dim %d" %p for p in [4, 5, 6, 7]]) 
