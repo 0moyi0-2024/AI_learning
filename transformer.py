@@ -175,3 +175,44 @@ y = pe(Variable(torch.zeros(1, 100, 20)))
 plt.plot(np.arange(100), y[0, :, 4:8].data.numpy())
 
 plt.legend(["dim %d" %p for p in [4, 5, 6, 7]]) 
+
+
+print(np.triu([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]], k = -1))
+print(np.triu([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]], k = 0))
+print(np.triu([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]], k = 1))
+
+
+'''
+[[ 1  2  3]
+ [ 4  5  6]
+ [ 0  8  9]
+ [ 0  0 12]]
+[[1 2 3]
+ [0 5 6]
+ [0 0 9]
+ [0 0 0]]
+[[0 2 3]
+ [0 0 6]
+ [0 0 0]
+ [0 0 0]]
+'''
+
+# 构建掩码张量函数
+def subsequent_mask(size):
+    # size：代表掩码张量最后两个维度，形成一个方阵
+    attn_shape = (1, size, size)
+
+    # 使用np.ones()先构建一个全1的张量，然后利用np.triu()形成上三角矩阵
+    subsequent_mask = np.triu(np.ones(attn_shape), k = 1).astype('uint8')
+
+    # 使得这个三角矩阵反转
+    return torch.from_numpy(1 - subsequent_mask)
+
+size = 5
+sm = subsequent_mask(size)
+# print("sm:", sm)
+
+plt.figure(figsize = (5, 5))
+plt.imshow(subsequent_mask(20)[0])
+
+
